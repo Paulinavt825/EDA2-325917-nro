@@ -19,7 +19,7 @@ int main()
     
     //COMPILO
     // ./a.exe ya lo hace
-
+    // diff --strip-trailing-cr arch1 arch2
 
     AVL avl = crearAVL();
     int cant, id, puntaje;
