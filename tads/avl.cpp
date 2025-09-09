@@ -95,7 +95,7 @@ bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int
     }
     else if (id > pa->id)
     {
-        insertado = insertarAVLRec(pa->der, top, id, nombre, puntaje, varioAltura);
+        insertado = insertarAVLRec(pa->der, top, puntaje, nombre, id, varioAltura);
         if (varioAltura)
         {
             switch (pa->fVal)
@@ -161,6 +161,7 @@ string findRec(NodoAVL *raiz, int id)
         if (raiz->id == id)
         {
             string res = raiz->nombre + " " + to_string(raiz->puntaje);
+            return res;
         }
         else if (raiz->id < id)
         {
@@ -180,24 +181,16 @@ string find(AVL avl, int id)
 
 int rankear(AVL avl, int puntaje)
 {
+    return 0;
 }
 
 string top1(AVL avl)
 {
-    cout << avl->top->nombre << " " << avl->top->puntaje << endl;
+    string res = avl->top->nombre + " " + to_string(avl->top->puntaje);
+    return res;
 }
 
 int count(AVL avl)
 {
-    cout << avl->cantElementos << endl;
-}
-
-void insertarAVL(AVL a, int puntaje, string nombre, int id)
-{
-    bool varioAltura = false;
-    bool insertado = insertarAVLRec(a->raiz, a->top, puntaje, nombre, id, varioAltura);
-    if (insertado)
-    {
-        a->cantElementos++;
-    }
+    return avl->cantElementos;
 }
