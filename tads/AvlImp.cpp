@@ -13,8 +13,9 @@ struct NodoAVL
     NodoAVL *izq;
     NodoAVL *der;
     int fVal;
+    int tamano;
 
-    NodoAVL(int clave, string nom, int punt) : id(clave), nombre(nom), puntaje(punt), izq(NULL), der(NULL), fVal(0) {}
+    NodoAVL(int clave, string nom, int punt) : id(clave), nombre(nom), puntaje(punt), izq(NULL), der(NULL), fVal(0), tamano(1) {}
 };
 
 struct RepresentacionAVL
@@ -41,6 +42,26 @@ void actualizarTop(NodoAVL *nuevo, NodoAVL *&top)
     }
 }
 
+// pre:
+// post:
+void actualizarTamano(NodoAVL *a)
+{
+    if (a)
+    {
+        int tIzq = 0;
+        int tDer = 0;
+        if (a->der)
+        {
+            tDer = a->der->tamano;
+        }
+        if (a->izq)
+        {
+            tIzq = a->izq->tamano;
+        }
+        a->tamano = 1 + tIzq + tDer;
+    }
+}
+
 bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int id, bool &varioAltura)
 {
     bool insertado;
@@ -54,6 +75,8 @@ bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int
     if (id < pa->id)
     {
         insertado = insertarAVLRec(pa->izq, top, puntaje, nombre, id, varioAltura);
+        actualizarTamano(pa);
+
         if (varioAltura)
         {
             switch (pa->fVal)
@@ -67,14 +90,17 @@ bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int
                 break;
             case -1:
                 NodoAVL *p1 = pa->izq;
-                if (p1->fVal == -1)
+                if (p1->fVal == -1) // Rot Der
                 {
                     pa->izq = p1->der;
                     p1->der = pa;
                     pa->fVal = 0;
                     pa = p1;
+
+                    actualizarTamano(p1);
+                    actualizarTamano(pa);
                 }
-                else
+                else // Rot Izq-Der
                 {
                     NodoAVL *p2 = p1->der;
                     p1->der = p2->izq;
@@ -84,6 +110,10 @@ bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int
                     pa->fVal = p2->fVal == -1 ? 1 : 0;
                     p1->fVal = p2->fVal == 1 ? -1 : 0;
                     pa = p2;
+
+                    actualizarTamano(p1);
+                    actualizarTamano(p2);
+                    actualizarTamano(pa);
                 }
                 pa->fVal = 0;
                 varioAltura = false;
@@ -93,9 +123,11 @@ bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int
         }
         return insertado;
     }
-    else if (id > pa->id)
+    else if (id >= pa->id)
     {
         insertado = insertarAVLRec(pa->der, top, puntaje, nombre, id, varioAltura);
+        actualizarTamano(pa);
+
         if (varioAltura)
         {
             switch (pa->fVal)
@@ -109,14 +141,17 @@ bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int
                 break;
             case 1:
                 NodoAVL *p1 = pa->der;
-                if (p1->fVal == 1)
+                if (p1->fVal == 1) //Rot Izq
                 {
                     pa->der = p1->izq;
                     p1->izq = pa;
                     pa->fVal = 0;
                     pa = p1;
+
+                    actualizarTamano(p1);
+                    actualizarTamano(pa);
                 }
-                else
+                else //Rot Der-Izq
                 {
                     NodoAVL *p2 = p1->izq;
                     p1->izq = p2->der;
@@ -126,6 +161,11 @@ bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int
                     pa->fVal = p2->fVal == 1 ? -1 : 0;
                     p1->fVal = p2->fVal == -1 ? 1 : 0;
                     pa = p2;
+
+                    actualizarTamano(p1);
+                    actualizarTamano(p2);
+                    actualizarTamano(pa);
+
                     return insertado;
                 }
                 pa->fVal = 0;
