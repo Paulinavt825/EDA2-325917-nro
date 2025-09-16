@@ -1,31 +1,36 @@
 #ifndef AVL_H
 #define AVL_H
 
-template <class T>
-class List
-{
-public:
-    //
-    virtual void add(int id, const char *nombre, int puntaje) =0;
+struct RepresentacionAVL;
+//struct NodoAVL;
+typedef RepresentacionAVL* Avl;
 
-    // pre:
-    // post: 
-    virtual void find(int id)=0;
 
-    // pre:
-    // post: 
-    virtual int rankear(int puntaje)=0;
+#include <string>
+using namespace std;
 
-    // pre:
-    // post: 
-    virtual void top1()=0;
- 
-    // pre:
-    // post: 
-    virtual void count()=0;
+// pre:
+// post:
+Avl crearAvl();
 
-    // pre:
-    // post: 
-};
+// pre:
+// post:
+void add(Avl a, int id, string nombre, int puntaje);
+
+// pre:
+// post:
+string find(Avl a,int id);
+
+// pre:
+// post:
+int rankear(Avl a, int puntaje);
+
+// pre:
+// post:
+string top1(Avl a);
+
+// pre:
+// post:
+int count(Avl a);
 
 #endif

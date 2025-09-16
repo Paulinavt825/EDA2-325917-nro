@@ -1,6 +1,7 @@
+#include "Avl.h"
 #include <stdio.h>
 #include <iostream>
-#include <string.h>
+#include <string>
 using namespace std;
 
 struct NodoAVL
@@ -24,9 +25,8 @@ struct RepresentacionAVL
 
     RepresentacionAVL() : raiz(NULL), top(NULL), cantElementos(0) {}
 };
-typedef RepresentacionAVL *AVL;
 
-AVL crearAVL()
+Avl crearAvl()
 {
     return new RepresentacionAVL();
 }
@@ -140,7 +140,7 @@ bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int
         return false;
 }
 
-void add(AVL avl, int id, string nombre, int puntaje)
+void add(Avl avl, int id, string nombre, int puntaje)
 {
     bool varioAltura = false;
     bool insertado = insertarAVLRec(avl->raiz, avl->top, puntaje, nombre, id, varioAltura);
@@ -174,23 +174,23 @@ string findRec(NodoAVL *raiz, int id)
     }
 }
 
-string find(AVL avl, int id)
+string find(Avl avl, int id)
 {
     return findRec(avl->raiz, id);
 }
 
-int rankear(AVL avl, int puntaje)
+int rankear(Avl avl, int puntaje)
 {
     return 0;
 }
 
-string top1(AVL avl)
+string top1(Avl avl)
 {
     string res = avl->top->nombre + " " + to_string(avl->top->puntaje);
     return res;
 }
 
-int count(AVL avl)
+int count(Avl avl)
 {
     return avl->cantElementos;
 }

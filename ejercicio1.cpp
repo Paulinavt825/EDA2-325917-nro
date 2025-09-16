@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 #include <limits>
-#include "tads/avl.h"
+#include "tads/Avl.h"
 #include "tads/avl.cpp"
 #include <fstream>
 
@@ -16,12 +16,12 @@ int main()
     // Si desean tirar la salida a un archivo, usen las siguientes líneas (si no, sáquenlas):
     ofstream myFile2("tests/ejercicio1/10.mine.txt");
     cout.rdbuf(myFile2.rdbuf());
-    
-    //COMPILO
-    // ./a.exe ya lo hace
-    // diff --strip-trailing-cr arch1 arch2
 
-    AVL avl = crearAVL();
+    // COMPILO
+    //  ./a.exe ya lo hace
+    //  diff --strip-trailing-cr arch1 arch2
+
+    Avl avl = crearAvl();
     int cant, id, puntaje;
     string op, nom;
 
