@@ -7,7 +7,6 @@
 
 using namespace std;
 
-
 int main()
 {
     // IMPORTANTE! BORRAR O COMENTAR LAS SIGUIENTES LINEAS  EN TODOS LOS EJERCICIOS DEL OBLIGATORIO. NO PUEDEN ESTAR EN NINGUNA ENTREGA!
@@ -21,34 +20,41 @@ int main()
     //  ./a.exe ya lo hace
     //  diff --strip-trailing-cr arch1 arch2
 
-    int cant, id, puntaje;
-    string op, nom;
-    HashCerrado h = HashCerrado(1);
-
+    int cant;
+    string op;
     cin >> cant;
+    HashCerrado h = HashCerrado(cant);
+
     for (int i = 0; i < cant; i++)
     {
         cin >> op;
 
-        if (op == "ADD")
+        if (op == "PUT")
         {
-            
         }
-        else if (op == "FIND")
+        else if (op == "GET")
         {
-            
         }
-        else if (op == "RANK")
+        else if (op == "REMOVE")
         {
-           
         }
-        else if (op == "TOP1")
+        else if (op == "CONTAINS")
         {
-           
         }
-        else if (op == "COUNT")
+        else if (op == "COUNT_DOMAIN")
         {
-           
+        }
+        else if (op == "LIST_DOMAIN")
+        {
+        }
+        else if (op == "CLEAR_DOMAIN")
+        {
+        }
+        else if (op == "SIZE")
+        {
+        }
+        else if (op == "CLEAR")
+        {
         }
     }
 

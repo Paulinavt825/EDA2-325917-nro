@@ -164,6 +164,7 @@ public:
 
     string *list_domain(string dominio)
     {
+        
     }
 
     void clear_domain(string dominio)

@@ -6,16 +6,16 @@ using namespace std;
 
 struct NodoAVL
 {
-    int id;
+    int clave;
     string nombre;
-    int puntaje;
+    int dato;
 
     NodoAVL *izq;
     NodoAVL *der;
     int fVal;
     int tamano;
 
-    NodoAVL(int clave, string nom, int punt) : id(clave), nombre(nom), puntaje(punt), izq(NULL), der(NULL), fVal(0), tamano(1) {}
+    NodoAVL(int clave, string nom, int punt) : clave(clave), nombre(nom), dato(punt), izq(NULL), der(NULL), fVal(0), tamano(1) {}
 };
 
 struct RepresentacionAVL
@@ -36,7 +36,7 @@ Avl crearAvl()
 // post:
 void actualizarTop(NodoAVL *nuevo, NodoAVL *&top)
 {
-    if (!top || (top->puntaje < nuevo->puntaje) || (top->puntaje == nuevo->puntaje && top->id > nuevo->id))
+    if (!top || (top->dato < nuevo->dato) || (top->dato == nuevo->dato && top->clave > nuevo->clave))
     {
         top = nuevo;
     }
@@ -72,7 +72,7 @@ bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int
         varioAltura = true;
         return true;
     }
-    if (id < pa->id)
+    if (id < pa->clave)
     {
         insertado = insertarAVLRec(pa->izq, top, puntaje, nombre, id, varioAltura);
         actualizarTamano(pa);
@@ -97,7 +97,7 @@ bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int
                     pa->fVal = 0;
                     pa = p1;
 
-                    actualizarTamano(p1);
+                    actualizarTamano(pa->der);
                     actualizarTamano(pa);
                 }
                 else // Rot Izq-Der
@@ -111,8 +111,8 @@ bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int
                     p1->fVal = p2->fVal == 1 ? -1 : 0;
                     pa = p2;
 
-                    actualizarTamano(p1);
-                    actualizarTamano(p2);
+                    actualizarTamano(pa->izq);
+                    actualizarTamano(pa->der);
                     actualizarTamano(pa);
                 }
                 pa->fVal = 0;
@@ -123,7 +123,7 @@ bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int
         }
         return insertado;
     }
-    else if (id >= pa->id)
+    else if (id >= pa->clave)
     {
         insertado = insertarAVLRec(pa->der, top, puntaje, nombre, id, varioAltura);
         actualizarTamano(pa);
@@ -141,17 +141,17 @@ bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int
                 break;
             case 1:
                 NodoAVL *p1 = pa->der;
-                if (p1->fVal == 1) //Rot Izq
+                if (p1->fVal == 1) // Rot Izq
                 {
                     pa->der = p1->izq;
                     p1->izq = pa;
                     pa->fVal = 0;
                     pa = p1;
 
-                    actualizarTamano(p1);
+                    actualizarTamano(pa->der);
                     actualizarTamano(pa);
                 }
-                else //Rot Der-Izq
+                else // Rot Der-Izq
                 {
                     NodoAVL *p2 = p1->izq;
                     p1->izq = p2->der;
@@ -162,8 +162,8 @@ bool insertarAVLRec(NodoAVL *&pa, NodoAVL *&top, int puntaje, string nombre, int
                     p1->fVal = p2->fVal == -1 ? 1 : 0;
                     pa = p2;
 
-                    actualizarTamano(p1);
-                    actualizarTamano(p2);
+                    actualizarTamano(p1->der);
+                    actualizarTamano(p2->izq);
                     actualizarTamano(pa);
 
                     return insertado;
@@ -198,12 +198,12 @@ string findRec(NodoAVL *raiz, int id)
     }
     else
     {
-        if (raiz->id == id)
+        if (raiz->clave == id)
         {
-            string res = raiz->nombre + " " + to_string(raiz->puntaje);
+            string res = raiz->nombre + " " + to_string(raiz->dato);
             return res;
         }
-        else if (raiz->id < id)
+        else if (raiz->clave < id)
         {
             return findRec(raiz->der, id);
         }
@@ -219,14 +219,43 @@ string find(Avl avl, int id)
     return findRec(avl->raiz, id);
 }
 
+int rankearRec(NodoAVL *a, int p)
+{
+    if (!a)
+        return 0;
+    else
+    {
+        if (a->clave < p)
+        {
+            return rankearRec(a->der, p);
+        }
+        else
+        {
+            if (a->der)
+            {
+                return 1 + (a->der->tamano) + (rankearRec(a->izq, p));
+            }
+            else
+            {
+                return 1 + (rankearRec(a->izq, p));
+            }
+        }
+    }
+}
+
 int rankear(Avl avl, int puntaje)
 {
-    return 0;
+    if (!avl)
+        return 0;
+    else
+    {
+        return rankearRec(avl->raiz, puntaje);
+    }
 }
 
 string top1(Avl avl)
 {
-    string res = avl->top->nombre + " " + to_string(avl->top->puntaje);
+    string res = avl->top->nombre + " " + to_string(avl->top->dato);
     return res;
 }
 
