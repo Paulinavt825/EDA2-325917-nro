@@ -43,7 +43,8 @@ private:
 
     int primoSupMinimo(int dato)
     {
-        while (!esPrimo(++dato));
+        while (!esPrimo(++dato))
+            ;
         return dato;
     }
 
@@ -110,11 +111,33 @@ public:
 
     string get(string dominio, string path)
     {
-        int i = fHash2(dominio) % largoVec;
-        int j = 1;
+        int h1 = fHash1(dominio + path);
+        int h2 = fHash2(dominio + path);
+        int j = 0;
+        int i;
+
+        while (j < largoVec && tabla[i]) // idea de chat
+        {
+            i = abs(h2 + j * h1) % largoVec;
+            if (!tabla[i]->estaBorrado && tabla[i]->dominio == dominio && tabla[i]->path == path)
+            {
+                return tabla[i]->dominio + " " + to_string(tabla[i]->tiempo);
+            }
+            j++;
+        }
+        return "recurso_no_encontrado";
+    }
+
+    /*
+    string get(string dominio, string path)
+    {
+        int h1 = fHash1(dominio + path);
+        int h2 = fHash2(dominio+path);
+        int i = h2;
+        int j = 0;
         while (tabla[i] && (tabla[i]->estaBorrado || tabla[i]->dominio != dominio || tabla[i]->path !=path))
         {
-            i = abs(i + j * fHash1(dominio + path)) % largoVec;
+            i = abs(h2 + j * h1) % largoVec;
             j++;
         }
         if(tabla[i]){
@@ -122,49 +145,54 @@ public:
         } else {
             return "recurso_no_encontrado";
         }
-    }
+    } */
 
     void remove(string dominio, string path)
     {
-        int i = fHash2(dominio) % largoVec;
-        int j = 1;
-        while (tabla[i] && (tabla[i]->estaBorrado || tabla[i]->dominio != dominio || tabla[i]->path !=path))
+        int h1 = fHash1(dominio + path);
+        int h2 = fHash2(dominio + path);
+        int j = 0;
+        int i;
+
+        while (j < largoVec && tabla[i])
         {
-            i = abs(i + j * fHash1(dominio + path)) % largoVec;
+            i = abs(h2 + j * h1) % largoVec;
+            if (!tabla[i]->estaBorrado && tabla[i]->dominio == dominio && tabla[i]->path == path)
+            {
+                tabla[i]->estaBorrado = true;
+            }
             j++;
-        }
-        if(tabla[i]){
-            tabla[i]->estaBorrado=true;
         }
     }
 
-    bool contains(string dominio, string path)
+    string contains(string dominio, string path)
     {
-        int i = fHash2(dominio) % largoVec;
-        int j = 1;
-        while (tabla[i] && (tabla[i]->estaBorrado || tabla[i]->dominio != dominio || tabla[i]->path !=path))
+        int h1 = fHash1(dominio + path);
+        int h2 = fHash2(dominio + path);
+        int j = 0;
+        int i;
+
+        while (j < largoVec && tabla[i])
         {
-            i = abs(i + j * fHash1(dominio + path)) % largoVec;
+            i = abs(h2 + j * h1) % largoVec;
+            if (!tabla[i]->estaBorrado && tabla[i]->dominio == dominio && tabla[i]->path == path)
+            {
+                return "true";
+            }
             j++;
         }
-        return tabla[i]!=NULL;
+        return "false";
     }
 
     int count_domain(string dominio)
-    {
-        int i = fHash2(dominio) % largoVec;
-        int j = 1;
-        while (tabla[i] && (tabla[i]->estaBorrado || tabla[i]->dominio != dominio))
-        {
-            i = abs(i + j * fHash1(dominio)) % largoVec;
-            j++;
-        }
-        return ;
+    {        
+        return 0;
     }
 
-    string *list_domain(string dominio)
+    string list_domain(string dominio)
     {
-        
+        string a = "A"; // armar astring aca
+        return a;
     }
 
     void clear_domain(string dominio)
@@ -178,9 +206,8 @@ public:
 
     void clear()
     {
-        for(int i=0; i<largoVec && tabla[i]; i++){
-
+        for (int i = 0; i < largoVec && tabla[i]; i++)
+        {
         }
-
     }
 };

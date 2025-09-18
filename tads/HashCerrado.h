@@ -1,9 +1,13 @@
 #ifndef HASHC_H
 #define HASHC_H
 
+#include <string>
+using namespace std;
+
 class HashCerrado
 {
 public:
+
     // pre:
     // post: Agrega o actualiza un recurso en el cache. Si ya existe, actualiza título y tiempo.
     void put(string dominio, string path, string titulo, int tiempo);
